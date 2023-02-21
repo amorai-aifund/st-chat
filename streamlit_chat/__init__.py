@@ -20,35 +20,10 @@ else:
         url = "http://localhost:3001"
     )
 
-# data type for avatar style
-AvatarStyle = Literal[ 
-    "adventurer", 
-    "adventurer-neutral", 
-    "avataaars",
-    "big-ears",
-    "big-ears-neutral",
-    "big-smile",
-    "bottts", 
-    "croodles",
-    "croodles-neutral",
-    "female",
-    "gridy",
-    "human",
-    "identicon",
-    "initials",
-    "jdenticon",
-    "male",
-    "micah",
-    "miniavs",
-    "pixel-art",
-    "pixel-art-neutral",
-    "personas",
-]
 
 def message(message: str, 
             is_user: Optional[bool] = False, 
-            avatar_style: Optional[AvatarStyle] = None,
-            seed: Optional[Union[int, str]] = 42,
+            avatar_url: Optional[str] = None,
             key: Optional[str] = None):
     """
     Creates a new instance of streamlit-chat component
@@ -60,12 +35,8 @@ def message(message: str,
     is_user: bool 
         if the sender of the message is user, if `True` will align the 
         message to right, default is False.
-    avatar_style: Literal or None
-        The style for the avatar of the sender of message, default is bottts
-        for not user, and pixel-art-neutral for user.
-        st-chat uses https://avatars.dicebear.com/styles for the avatar
-    seed: int or str
-        The seed for choosing the avatar to be used, default is 42.
+    avatar_url: Literal or None
+        link to the avatar image
     key: str or None
         An optional key that uniquely identifies this component. If this is
         None, and the component's arguments are changed, the component will
@@ -73,10 +44,11 @@ def message(message: str,
 
     Returns: None
     """
-    if not avatar_style:
+    if not avatar_url:
         avatar_style = "pixel-art-neutral" if is_user else "bottts"
+        avatar_url = f"https://avatars.dicebear.com/api/{avatar_style}/42.svg"
 
-    _streamlit_chat(message=message, seed=seed, isUser=is_user, avatarStyle=avatar_style, key=key)
+    _streamlit_chat(message=message, isUser=is_user, avatarUrl=avatar_url, key=key)
 
 
 if not _RELEASE:
